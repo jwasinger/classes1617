@@ -33,18 +33,78 @@
         $\{q_6\}$ & $\{q_6\}$ & $\{q_6\}$ \\
       \end{tabular}
     \item Answer:
-      $Q = \{(1), (1,2,3,4), (1,2,3)\}$
+      $Q = \{\{1\}, \{1,2\}, \{1,2,3\}, \{1,2,3,4\}\}$
       $F = \{q_5, q_6\}$
 
       Transition table\\\\
       \begin{tabular}{ l | c | r }
         State & a & b \\ \hline
         $\{1\}$ & $\{1,2,3,4\}$ & $\emptyset$ \\
-
+        $\{1, 2\}$ & $\{1,2,3,4\}$ & $\{1,2\}$ \\
+        $\{1, 2, 3\}$ & $\{1,2,3,4\}$ & $\{1,2\}$ \\
         $\{1,2,3,4\}$ & $\{1,2,3,4\}$ & $\{1,2,3\}$ \\
       \end{tabular}
-    \item TODO
+    \item Answer
+      \begin{enumerate}
+        \item define $M_5$ such that $L(M_5)$ accepts all strings in either $L(M_2)$ or $L(M_1)$ but not both: $L(M_5) = L(M_1) \cup L(M_2) \setminus L(M_1) \cap L(M_2)$
+        \item Let $M_3 = M_1 \cup M_2$:\\
+          $Q_{M3} = \{AD, AE, AF, BD, BE, BF, CD, CE, CF\}$
+          $F_{M3} = \{AD, AE, AF, BD, BE, BF, CF\}$
+          
+          Transition table\\\\
+          \begin{tabular}{ l | c | r }
+            State & a & b \\ \hline
+            $AD$ & $AE$ & $BD$ \\
+            $AE$ & $AF$ & $BD$ \\
+            $AF$ & $AF$ & $BD$ \\
 
+            $BD$ & $AE$ & $CD$ \\
+            $BE$ & $AF$ & $CD$ \\
+            $BF$ & $AF$ & $CD$ \\
+
+            $BD$ & $AE$ & $CD$ \\
+            $BE$ & $AF$ & $CD$ \\
+            $BF$ & $AF$ & $CD$ \\
+          \end{tabular}
+        \item Let $M_4 = M_1 \cap M_2$:\\
+          $Q_{M4} = \{AD, AE, AF, BD, BE, BF, CD, CE, CF\}$
+          $F_{M4} = \{AF, BF\}$
+          
+          Transition table\\\\
+          \begin{tabular}{ l | c | r }
+            State & a & b \\ \hline
+            $AD$ & $AE$ & $BD$ \\
+            $AE$ & $AF$ & $BD$ \\
+            $AF$ & $AF$ & $BD$ \\
+
+            $BD$ & $AE$ & $CD$ \\
+            $BE$ & $AF$ & $CD$ \\
+            $BF$ & $AF$ & $CD$ \\
+
+            $BD$ & $AE$ & $CD$ \\
+            $BE$ & $AF$ & $CD$ \\
+            $BF$ & $AF$ & $CD$ \\
+          \end{tabular}
+        \item $M_5 = M_3 \setminus M_2$
+          $Q_{M5} = \{AD, AE, AF, BD, BE, BF, CD, CE, CF\}$
+          $F_{M5} = F_{M3} \cap F_{M4} = \{AD, AE, BD, BE, CF\}$
+
+          Transition table\\\\
+          \begin{tabular}{ l | c | r }
+            State & a & b \\ \hline
+            $AD$ & $AE$ & $BD$ \\
+            $AE$ & $AF$ & $BD$ \\
+            $AF$ & $AF$ & $BD$ \\
+
+            $BD$ & $AE$ & $CD$ \\
+            $BE$ & $AF$ & $CD$ \\
+            $BF$ & $AF$ & $CD$ \\
+
+            $BD$ & $AE$ & $CD$ \\
+            $BE$ & $AF$ & $CD$ \\
+            $BF$ & $AF$ & $CD$ \\
+          \end{tabular}
+      \end{enumerate}
     \item Answer: 
       \begin{enumerate}
         \item Let $A$ be the set of all strings with '011' inserted only once:
