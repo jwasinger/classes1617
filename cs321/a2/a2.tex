@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{flexisym}
+
+\begin{document}
+
+  \title{CS 321: Assignment 2}
+  \author{Jared Wasinger}
+
+  \maketitle
+
+  \begin{enumerate}
+    \item Answer:\\
+      $Q = \{q_0, q_1, q_2, q_3, q_4, q_5, q_6\}$\\
+      $F = \{q_5, q_6\}$
+
+      Transition table\\\\
+      \begin{tabular}{ l | c | r }
+        State & a & b \\ \hline
+        $\{q_0\}$ & $\{q_0, q_1\}$ & $\{q_0, q_2\}$ \\
+
+        $\{q_1\}$ & $\{q_1, q_3\}$ & $\{q_1\}$ \\
+
+        $\{q_2\}$ & $\{q_2\}$ & $\{q_2, q_4\}$ \\
+
+        $\{q_3\}$ & $\{q_3, q_5\}$ & $\{q_3\}$ \\
+
+        $\{q_4\}$ & $\{q_4\}$ & $\{q_4, q_6\}$ \\
+
+        $\{q_5\}$ & $\{q_5\}$ & $\{q_5\}$ \\
+
+        $\{q_6\}$ & $\{q_6\}$ & $\{q_6\}$ \\
+      \end{tabular}
+    \item Answer:
+      $Q = \{(1), (1,2,3,4), (1,2,3)\}$
+      $F = \{q_5, q_6\}$
+
+      Transition table\\\\
+      \begin{tabular}{ l | c | r }
+        State & a & b \\ \hline
+        $\{1\}$ & $\{1,2,3,4\}$ & $\emptyset$ \\
+
+        $\{1,2,3,4\}$ & $\{1,2,3,4\}$ & $\{1,2,3\}$ \\
+      \end{tabular}
+    \item TODO
+
+    \item Answer: 
+      \begin{enumerate}
+        \item Let $A$ be the set of all strings with '011' inserted only once:
+          $\Sigma_A = \{0,1\}$\\
+          $Q_A = \{q_0, q_1, q_2, q_3, q_4, q_5, q_6\}$\\
+          $F_A = \{q_3, q_4, q_5\}$\\
+          $A$ Transition Table:\\
+          \begin{tabular}{ l | c | r }
+            State & 0 & 1 \\ \hline
+            $q_0$ & $q_1$ & $q_0$ \\
+
+            $q_1$ & $q_0$ & $q_2$ \\
+
+            $q_2$ & $q_0$ & $q_3$ \\
+
+            $q_3$ & $q_4$ & $q_3$ \\
+
+            $q_4$ & $q_3$ & $q_5$ \\
+
+            $q_5$ & $q_3$ & $q_6$ \\
+
+            $q_6$ & $q_6$ & $q_6$ \\
+          \end{tabular}
+        \item Let $B$ be the set of all strings divisible by 3.
+          $\Sigma_B = \{0,1\}$\\
+          $Q_B = \{q_0, q_1, q_2\}$\\
+          $F_B = \{q_0\}$\\
+          $B$ Transition Table:\\
+          \begin{tabular}{ l | c | r }
+            State & 0 & 1 \\ \hline
+            $q_0$ & $q_0$ & $q_1$ \\
+
+            $q_1$ & $q_2$ & $q_0$ \\
+
+            $q_2$ & $q_1$ & $q_2$ \\
+          \end{tabular}
+        \item Then, the final answer $C = A \cap B$
+        \item Intersection is closed under the set of regular languages so $C$ is regular.
+      \end{enumerate}
+  \end{enumerate}
+\end{document}

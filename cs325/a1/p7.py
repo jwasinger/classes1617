@@ -40,14 +40,4 @@ def compare_fib():
   
   return output
 
-map 
 output = compare_fib()
-pdb.set_trace()
-
-X = np.linspace(-np.pi, np.pi, 256, endpoint=True)
-C, S = np.cos(X), np.sin(X)
-
-plt.plot(X, C)
-plt.plot(X, S)
-
-plt.show()
