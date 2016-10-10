@@ -11,10 +11,26 @@
 
   \begin{enumerate}
     \item\begin{enumerate}
-      \item $T(n) = T(n-2) + 2$
+      \item $T(n) = T(n-2) + 2$\\
+      Using the Muster Method:
+      $a=1,b=2,d=0 (because f(n) = \Theta(1))$\\
+      $T(n) = \Theta(n^{d+1}) = \Theta(n)$
+
       \item $T(n) = 3T(n-1) + 1$
-      \item $T(n) = 2T(n/4) + n^2$
-      \item $T(n) = 9T(n/3) + 6n^2$
+      Using the Muster Method:
+      $a=3,b=1,d=0 (because f(n) = \Theta(1)$
+      $T(n) = \Theta(a^{n/b}) = \Theta(3^n)$
+
+      \item $T(n) = 2T(n/4) + n^2$\\
+      Master Method: $a=2, b=4, f(n)=n^2$\\
+      $n^{log_ba} = n^{log42} = n^{0.5}$\\
+      Case \#3: $T(n) = \Theta(n^2)$\\
+
+      \item $T(n) = 9T(n/3) + 6n^2$\\
+      Master Method: $a=9, b=3, f(n)=6n^2$\\
+      $n^{log_ba} = n^{log_39} = n^2$
+      Case \#2: $T(n) = \Theta(n^2lgn)$\\
+
     \end{enumerate}
     \item\begin{enumerate}
       \item Stooge sort works by recursively sorting the first $2/3$ of the input, sorting the last $2/3$ of the input and finally sorting the first $2/3$ again.\\
@@ -78,5 +94,53 @@
         return (max(left_min_max[0], right_min_max[0]), min(left_min_max[1], right_min_max[1]))
 
     \end{verbatim}
+    \textbf{Recurrence Relationship:}\\
+    $T(n) = 2T(n/2) + O(n)$
+    \textbf{Asymptotic Complexity}\\
+    Master Method\\
+    $a = 2, b=2 f(n)=O(n)$\\
+    $f(n) = O(n^{log_2{2}} = O(n)$\\
+    Therefore\\
+    $T(n) = \Theta(nlgn)$
+
+    Because the iterative implementation of this algorithm is $\Theta(n)$, this means that the iterative implementation of the algorithm will scale better than the recursive one for large values of n.
+
+    \item\begin{verbatim}
+    def find_majority(array):
+      if len(array) == 1:
+        return (1, array[0])
+      elif len(array) == 2:
+        if array[0] == array[1]:
+          return (2, array[0])
+        else:
+          return None
+      else:
+        majority_left = find_majority(array[0:ceil(len(array)/2)])
+        majority_right = find_majority(array[ceil(len(array)/2)-1:len(array)])
+        if !majority_left):
+          return majority_right
+        if !majority_right:
+          return majority_left
+
+        if majority_left[1] == majority_right[1]:
+          return (majority_left[0] + majority_right[0], majority_right[1])
+        else:
+          else if majority_left[0] > majority_right[0]:
+            return (majority_left[0] - majority_right[0], majority_left[1])
+          else if majority_left[0] < majority_right[0]:
+            return (majority_right[0] - majority_left[0], majority_right[1])
+          else if majority_left[0] == majority_right[0]
+            return None
+    \end{verbatim}
+
+    \textbf{Recurrence Relationship:}\\
+    $T(n) = 2T(n/2) + O(n)$\\
+    \textbf{Asymptotic Complexity}\\
+    Master Method\\
+    $a = 2, b=2 f(n)=O(n)$\\
+    $f(n) = O(n^{log_2{2}} = O(n)$\\
+    Therefore\\
+    $T(n) = \Theta(nlgn)$
+
   \end{enumerate}
 \end{document}
