@@ -14,7 +14,45 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "glut.h"
+#include "heli.550"
 
+
+
+float
+Dot( float v1[3], float v2[3] )
+{
+  return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
+}
+void
+Cross( float v1[3], float v2[3], float vout[3] )
+{
+  float tmp[3];
+  tmp[0] = v1[1]*v2[2] - v2[1]*v1[2];
+  tmp[1] = v2[0]*v1[2] - v1[0]*v2[2];
+  tmp[2] = v1[0]*v2[1] - v2[0]*v1[1];
+  vout[0] = tmp[0];
+  vout[1] = tmp[1];
+  vout[2] = tmp[2];
+}
+float
+Unit( float vin[3], float vout[3] )
+{
+  float dist = vin[0]*vin[0] + vin[1]*vin[1] + vin[2]*vin[2];
+  if( dist > 0.0 )
+  {
+    dist = sqrt( dist );
+    vout[0] = vin[0] / dist;
+    vout[1] = vin[1] / dist;
+    vout[2] = vin[2] / dist;
+  }
+  else
+  {
+    vout[0] = vin[0];
+    vout[1] = vin[1];
+    vout[2] = vin[2];
+  }
+  return dist;
+}
 
 //	This is a sample OpenGL / GLUT program
 //
@@ -172,6 +210,7 @@ const GLfloat FOGEND      = { 4. };
 // non-constant global variables:
 
 int		ActiveButton;			// current button that is down
+float Time;
 GLuint	AxesList;				// list to hold the axes
 int		AxesOn;					// != 0 means to draw the axes
 int		DebugOn;				// != 0 means to print debugging info
@@ -185,20 +224,49 @@ int		Xmouse, Ymouse;			// mouse values
 float	Xrot, Yrot;				// rotation angles in degrees
 
 
+#define BLADE_RADIUS     1.0
+#define BLADE_WIDTH    0.4
+#define MS_IN_THE_ANIMATION_CYCLE 500
+
 /*
  * BEGIN -- Jared Variables
  */
 GLuint tri_list;
+GLuint blade_list;
+bool toggle_view_pilot = false;
+
 /*
  * END -- Jared Variables
  */
 
 
+GLuint genHeliBlade() {
+  // blade parameters:
+  // draw the helicopter blade with radius BLADE_RADIUS and
+  //  width BLADE_WIDTH centered at (0.,0.,0.) in the XY plane
+
+  GLuint list = glGenLists(1);
+  glNewList(list, GL_COMPILE);
+
+  glBegin( GL_TRIANGLES );
+    glColor3f(1.,1.,1.);
+    glVertex3f(  BLADE_RADIUS,  BLADE_WIDTH/2., 0. );
+    glVertex3f(  0., 0., 0. );
+    glVertex3f(  BLADE_RADIUS, -BLADE_WIDTH/2., 0. );
+
+    glVertex3f( -BLADE_RADIUS, -BLADE_WIDTH/2., 0. );
+    glVertex3f(  0., 0.,0. );
+    glVertex3f( -BLADE_RADIUS,  BLADE_WIDTH/2., 0. );
+  glEnd( );
+  glEndList();
+  return list;
+}
+
 GLuint genHeli() {
   double square_length = 1.;
   GLuint list = glGenLists(1);
   glNewList(list, GL_COMPILE);
-  glBegin(GL_QUADS);
+  //glBegin(GL_QUADS);
 
   int i;
   struct point *p0, *p1, *p2;
@@ -337,7 +405,7 @@ main( int argc, char *argv[ ] )
 /*
  * BEGIN -- Jared init code
  */
-
+glutIdleFunc(Animate);
 
 
 
@@ -389,6 +457,9 @@ Animate( )
 
 	glutSetWindow( MainWindow );
 	glutPostRedisplay( );
+  int ms = glutGet( GLUT_ELAPSED_TIME );  // milliseconds
+  ms  %=  MS_IN_THE_ANIMATION_CYCLE;
+  Time = (float)ms  /  (float)MS_IN_THE_ANIMATION_CYCLE;
 }
 
 
@@ -437,9 +508,9 @@ Display( )
 
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity( );
-	if( WhichProjection == ORTHO )
-		glOrtho( -3., 3.,     -3., 3.,     0.1, 1000. );
-	else
+	//if( WhichProjection == ORTHO )
+	//	glOrtho( -3., 3.,     -3., 3.,     0.1, 1000. );
+	//else
 		gluPerspective( 90., 1.,	0.1, 1000. );
 
 
@@ -451,13 +522,17 @@ Display( )
 
 	// set the eye position, look-at position, and up-vector:
 
-	gluLookAt( 0., 0., 3.,     0., 0., 0.,     0., 1., 0. );
+  if (toggle_view_pilot) { 
+   gluLookAt(-0.4, 1.8, -4.9,   -0.4,1.8,-5.9,       0.,1.,0.);
+  } else {
+    gluLookAt( 10., 0., 10.,     0., 0., 0.,     0., 1., 0. );
+  }
 
 
 	// rotate the scene:
 
-	glRotatef( (GLfloat)Yrot, 0., 1., 0. );
-	glRotatef( (GLfloat)Xrot, 1., 0., 0. );
+	//glRotatef( (GLfloat)Yrot, 0., 1., 0. );
+	//glRotatef( (GLfloat)Xrot, 1., 0., 0. );
 
 
 	// uniformly scale the scene:
@@ -510,13 +585,37 @@ Display( )
   
   glMatrixMode(GL_MODELVIEW);
 
-	glCallList( BoxList );
+	//glCallList( BoxList );
 
 
   glPushMatrix( );
-  glTranslatef( 0., 0., 0. );
+  //glTranslatef( 0., 0., 10. );
+  //glScalef(0.5f, 0.5f, 0.5f);
 
   glCallList(tri_list);
+
+  
+  glPushMatrix();
+
+  glTranslatef(0.,2.9,-2.);
+  glScalef(1., 1., 5.);
+  glRotatef(360.*Time, 0., 1., 0.);
+  glRotatef(90., 1., 0., 0.);
+  glCallList(blade_list);
+
+  glPopMatrix();
+
+  glPushMatrix();
+
+
+  glTranslatef(.5,2.5,9.);
+  glRotatef(360.*Time*3, 1., 0., 0.);
+  glRotatef(90., 0., 1., 0.);
+  glScalef(1., 1., 1.);
+
+  glCallList(blade_list);
+
+  glPopMatrix();
 
   glPopMatrix();
 
@@ -835,6 +934,7 @@ InitLists( )
 
 	// create the object:
   tri_list = genHeli();//genBoard();//genTriList();
+  blade_list = genHeliBlade();
 
 	BoxList = glGenLists( 1 );
 	glNewList( BoxList, GL_COMPILE );
@@ -925,6 +1025,10 @@ Keyboard( unsigned char c, int x, int y )
 		case ESCAPE:
 			DoMainMenu( QUIT );	// will not return here
 			break;				// happy compiler
+    case 'v':
+      toggle_view_pilot = !toggle_view_pilot;
+      glutPostRedisplay();
+      break;
 
 		default:
 			fprintf( stderr, "Don't know what to do with keyboard hit: '%c' (0x%0x)\n", c, c );

@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{flexisym}
+
+\begin{document}
+
+  \title{CS 321: Assignment 2}
+  \author{Jared Wasinger}
+
+  \maketitle
+
+  \begin{enumerate}
+    \item\begin{enumerate}
+      \item $\{w \in \{a,b\}^*|$ w has an even number of b's $\}$
+      $(a^*ba^*ba^*)^*$
+      \item $\{w \in \{a,b\}^*|$ w does not contain the substring ab$\}$\\
+      $b^*a^*$\\
+      \textbf{Explanation:} The restriction of not allowing 'ab' means that all b's in the string must come before all a's.
+      \item $\{w \in \{a,b\}^*|$ w contains the substring ab an even number of times$\}$
+      $((b^*a^*)ab(b^*a^*)ab(b^*a^*))^*$\\
+      \textbf{Explanation:}
+      This is similar to (a).  Each occurnce of 'ab' must match at least twice and must match an even number of times. The sub-regex $(b^*a^*)$ represents the regex matching all strings that are not 'ab' (the only allowed filler text to occur between occurances of 'ab'.  This is in order to enforce that 'ab' only occurs an even number of times while making allowances for all other sub-strings to occur at any place in the string.
+      \item $\{w \in \{a,b\}^*|$ w has an even number of a's and an even number of b's$\}$ \begin{enumerate}
+        \item All strings of length = 2 $\in \{a,b\}^*$\\
+          $\{aa,ab,ba,bb\}$
+        \item All strings with an even number of b's and a's are formed by:\\
+          $aa, bb, 2*(ab$ or $ba) = (ab+ba)(ab+ba)$
+        \item Regex:\\
+          $((aa+bb)^*+(ab+ba)(ab+ba))^*$\\
+        \item Edge cases and assumptions:\\
+          The empty string is accepted by this regex because 0 is an even number.  Thus an empty string (0 b's, 0 a's) has an even number of b's and a's.
+        \end{enumerate}
+      \end{enumerate}
+    \item\begin{enumerate}
+      \item Let $M$ be the language of all binary strings divisible by $3$.  For each string $x \in M, reverse(x) \in M$
+    \end{enumerate}
+  \end{enumerate}
+\end{document}

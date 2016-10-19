@@ -35,7 +35,7 @@
     \item\begin{enumerate}
       \item Stooge sort works by recursively sorting the first $2/3$ of the input, sorting the last $2/3$ of the input and finally sorting the first $2/3$ again.\\
       This algorithm sorts the data because it is able to do a full sort (establish a global sorting fot the array) in three separate sorts.  The third sort is needed because the second sort may change ordering in a way that makes the results of the first sort on the beginning $1/3$ of the array no longer sorted
-      \item No.  In the case where $n=4$, $k = floor(2n/3) = floor(2.\overline{6}) = 2$
+      \item No.  In the case where $n=4$, $k = floor(2n/3) = floor(2.\overline{6}) = 2$.  When the algorithm runs it will only sort the first and last half of the array making the result (possibly) incorrect.
       \item $T(n) = 3T(2n/3) + 1$
       \item Master Theorem:\\ 
         $a=3, f(n)=1, b=3/2$\\
