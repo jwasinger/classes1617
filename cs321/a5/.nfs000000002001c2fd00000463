@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{flexisym}
+
+\graphicspath{ {images/} }
+
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+
+\begin{document}
+
+  \title{CS 321: Assignment 5}
+  \author{Jared Wasinger}
+
+  \maketitle
+
+	\begin{enumerate}
+		\item\begin{enumerate}
+		  %\item\begin{enumerate}
+				%\item Adversary picks
+				%\end{enumerate}
+			\item\begin{enumerate}
+				\item Adversary picks $p$
+				\item I pick: $w$ = $a^pb^{p+1}$\\
+				\item Adversary splits $w$ into $w=xyz$
+					\begin{itemize}
+						\item $xy = a^{p}$ 
+						\item$z=b^{p+1}$
+						\item$|xy| \leq p$
+						\item$|z| = p+1 > 0$
+					\end{itemize}
+			  \item I choose $i = 2$\\
+					then, $xy^iz = xyyz$ has $p + |y|$ a's and p+1 b's.\\
+					$p+|y| > p+1$.  Therefore there are more a's than b's which means that $num(aa,w) \neq num(bbb,w)$. Thus, this string is not in the language.
+				\end{enumerate}
+			\item World
+			\end{enumerate}
+		\item\begin{enumerate}
+		  \item 
+						All strings where $\overbar{W} = rev(W)$  follow format:\\
+						$SubStr.ReversedSubStr$\\
+						CFG:\\
+						$S \rightarrow 0S1 | 1S0 | \epsilon$
+			\item 
+				%$aSb \rightarrow aaSbb \rightarrow aabSabb$\\
+				\textbf{Answer:} $S \rightarrow aSb | bSa | SS | \epsilon$\\
+			\end{enumerate}
+		\item $\{ w \in \{a,b\}^* | num(aaa,w) = num(bb,w)\}$\\
+			\textbf{Python pseudo-code description}\begin{verbatim}
+					
+				\end{verbatim}
+				\includegraphics[width=\textwidth]{p2_1.png}\\
+
+	\end{enumerate}
+\end{document}

@@ -1,0 +1,10 @@
+Choose a^(p^2) is greater than or equal to p
+
+adversary splits xyz.
+
+chooose i = 0
+
+len(z) greater than or equal to p^2 - p 
+len(x) less than or equal to p - 1
+len(xz) = (p^2 - p ) + (p - 1)
+p^2 - 1 \neq p^2
