@@ -15,18 +15,37 @@
   \maketitle
 
 	\begin{enumerate}
-		\item Foo
+		\item Answer \begin{enumerate}
+				\item \textbf{Base Case:} 
+					$w = \epsilon$\\
+					$\delta^*(s,w) = \delta^*(s, \epsilon) = q$\\
+					$ A_s \rightarrow^* wA_q, A_S \rightarrow cA_q, A_s \rightarrow \epsilon A_q$\\
+
+				\textbf{Inductive Step:}\\
+					Let $w = xb$\\
+					$\delta(\delta^*(s, x), b) = q$\\
+					Let p = $\delta^*(s, x)$\\
+					$\delta(p, b) = q$\\
+					$A_s \rightarrow xA_p, A_p \rightarrow bA_q$\\
+					$A_s \rightarrow^* xbA_q, A_s \rightarrow^* wA_q$\\
+
+				L(DFA) = L(CFL)\\
+					$L(DFA) = \{ w | \delta^*(s,w) \in F\}$\\
+					$L(CFL) = \{ w | A_s \rightarrow^* w\}$\\
+					An accepted string w must end in a terminal which means $w \in F$ as per the production rules of the given CFG.
+			\end{enumerate}
 		
-		\item \begin{enumerate}
+		\item 
 			$S \rightarrow aSddd | T$\\
 			$T \rightarrow bTdd | R$\\
 			$R \rightarrow cR | \epsilon$\\
-			\item \textbf{Eliminate the start symbol from right-hand sides}
+			\begin{enumerate}
+			\item \textbf{Eliminate the start symbol from right-hand sides}\\
 				$S_0 \rightarrow S$\\
 				$S \rightarrow aSddd | T$\\
 				$T \rightarrow bTdd | R$\\
 				$R \rightarrow cR | \epsilon$\\
-			\item \textbf{TERM: Eliminate rules with nonsolitary terminals}
+			\item \textbf{TERM: Eliminate rules with nonsolitary terminals}\\
 				
 				$S_0 \rightarrow S$\\
 				$S \rightarrow S_1SS_2S_3S_4 | T$\\
@@ -37,7 +56,7 @@
 				$T_1 \rightarrow b$\\ $T_2 \rightarrow d$\\$T_3 \rightarrow d$\\\\
 				$R_1 \rightarrow c$\\
 				
-			\item \textbf{BIN: Eliminate right-hand sides with more than 2 nonterminal }
+			\item \textbf{BIN: Eliminate right-hand sides with more than 2 nonterminal }\\
 				$S_5 \rightarrow S_1S$\\
 				$S_6 \rightarrow S_2S_3$\\
 				$S_7 \rightarrow S_5S_6$\\
@@ -55,7 +74,7 @@
 				$R \rightarrow R_1R | \epsilon$\\\\
 				$R_1 \rightarrow c$\\
 
-			\item \textbf{DEL: Eliminate $\epsilon$-rules}
+			\item \textbf{DEL: Eliminate $\epsilon$-rules}\\
 				$S_5 \rightarrow S_1S$\\
 				$S_6 \rightarrow S_2S_3$\\
 				$S_7 \rightarrow S_5S_6$\\
@@ -72,9 +91,9 @@
 
 				$R \rightarrow R_1R | R_1$\\\\
 				$R_1 \rightarrow c$\\
-			\item \textbf{UNIT: Eliminate unit rules}
+			\item \textbf{UNIT: Eliminate unit rules}\\
 				No unit rules
-			\item \textbf{Final Answer}
+			\item \textbf{Final Answer}\\
 				$S_5 \rightarrow S_1S$\\
 				$S_6 \rightarrow S_2S_3$\\
 				$S_7 \rightarrow S_5S_6$\\
@@ -93,7 +112,17 @@
 				$R_1 \rightarrow c$\\
 			\end{enumerate}
 		\item Answer \begin{enumerate}
-			\item \textbf{question:}  Does this mean $k \neq m \neq n$?
+			\item This language has the following cases:
+				\begin{itemize}
+					\item$k=m, k \neq n$
+					\item$m=n, n \neq k$
+					\item$k=n, n \neq m$
+					\item$k \neq m \neq n$
+				\end{itemize}
 			\end{enumerate}
+		\item $S_0 \rightarrow SS_2$\\
+			$S \rightarrow aSa | bSb | cS_2$\\
+			$S_2 \rightarrow aS | bS | \epsilon$\\
+			$S_0 \rightarrow SS_2$\\
 	\end{enumerate}
 \end{document}
