@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={6in,8in},
+ left=0in,
+ top=0in,
+ bottom=0in,
+ right=0in
+ }
+
+\begin{document}
+\begin{tabular}{ l | c | c | r}
+  \hline
+  Instruction & Operation & Description & Parameters \\
+  \hline
+  MOV Rd, Rr & $Rd \leftarrow Rr$ & Copy Register & d = 0, 1, ..., 31 r = 0, 1, ..., 31\\
+  \hline
+	MOVW Rd, Rr & $Rd + 1:Rd \leftarrow Rr+1:Rr$ & Copy register word & d = 0, 2, ..., 30  r = 0, 2, ..., 30\\
+\end{tabular}
+
+\begin{tabular}{ l | c | r}
+  \hline
+  Instruction & Operation & Description & Parameters \\
+  \hline
+	LD Rd, src & $Rd \leftarrow M(src)$ & Load indirect& d = 0, 1, ..., 31  src = X, X+, -X, Y, Y+, -Y, Z, Z+, or -Z\\
+	\hline
+	ST dst, Rr & $M(dst) \leftarrow Rr$ & Store indirect & dst = X, X+, -X, y, Y+, -Y, Z, Z+ or -Z  r = 0, 1, ..., 31\\
+	%\hline
+	%LDD Rd, src & $Rd \leftarrow M(src)$ & Load indirect with displacement
+	\hline
+	\multicolumn{4}{|c|}{Team Sheet}\\
+	\hline
+  GK & Paul Robinson \newline asdf \\
+  LB & Lucas Radebe \\
+  DC & Michael Duberry \\
+  DC & Dominic Matteo \\
+  RB & Dider Domi \\
+  MC & David Batty \\
+  MC & Eirik Bakke \\
+  MC & Jody Morris \\
+  FW & Jamie McMaster \\
+  ST & Alan Smith \\
+  ST & Mark Viduka \\
+  \hline
+\end{tabular}
+
+\end{document}

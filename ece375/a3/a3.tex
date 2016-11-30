@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{flexisym}
+\usepackage{graphicx}
+
+\begin{document}
+
+  \title{ECE 375: Assignment 3}
+  \author{Jared Wasinger}
+
+  \maketitle
+
+  \begin{enumerate}
+		\item\begin{verbatim}
+			.include “m128def.inc”
+			.def mpr = r16
+			.org $0000
+
+			rjmp INIT
+			…
+			reti
+			INIT: 
+				;set DDRA to control engine
+				ldi mpr, (1<<EngEnL)|(1<<EngEnR)|(1<<EngDirR)|(1<<EngDirL)
+				out DDRA, mpr 
+
+				;set DDRD to detect whiskers
+				ldi mpr, (0<<WskrL)|(0<<WskrR)
+				out DDRD, mpr 
+
+				;Enable pull-up resistors for left/right whiskers
+				ldi mpr, (1<<WskrL)|(1<<WskrR)
+				out PORTD, mpr 
+
+				; Initialize external interrupts (to trigger on falling edge)
+				ldi mpr, (1<<ISC01)|(0<<ISC00)|(1<<ISC11)|(0<<ISC10)
+				sts EICRA, mpr ; Use sts, EICRA is in extended I/O space
+				; Set EIMSK
+				ldi mpr, (1<<INT0)|(1<<INT1)
+				out EIMSK, mpr
+				; Turn on interrupts
+				sei
+		\end{verbatim}
+
+		\item\begin{verbatim}
+			.include "m128def.inc"
+			.DEF A = R16 ; General purpose register A
+			.DEF B = R17 ; General purpose register B
+
+			.ORG $0000
+			RJMP Initialize
+			.ORG $0046 ; End of interrupt vectors
+			Initialize:
+				; Initialize stack
+				LDI A, high(RAMEND)
+				OUT SPH, A
+				LDI A, low(RAMEND)
+				OUT SPL, A
+				; Initialize TCNT0
+				SBI DDRB, PB4 ; Set bit 4 of port B (OC0) for output
+				LDI A, 0b00000111 ; Activate Normal mode, OC0 disconnected,
+				OUT TCCR0, A ; and set prescaler to 1024
+			WAIT:
+			 	SBI PORTB, PB4 ; Turn on OC0
+				RCALL WAIT_0.5sec ; Call WAIT_0.5sec subroutine
+				CBI PORTB, PB4 ; Turn off OC0
+				LOOP:
+				RJMP LOOP ; Loop forever
+				; Subroutine to wait for 500 ms
+				WAIT_0.5sec:
+				LDI B, 50 ; Load loop count = 50
+				WAIT_10msec:
+				LDI A, 99 ; (Re)load value for delay
+				OUT TCNT0, A
+				; Wait for TCNT0 to roll over
+				CHECK:
+				IN A, TIFR ; Read in TIFR
+				ANDI A, 0b00000001 ; Check if TOV0 set
+				BREQ CKECK ; Loop if TOV0 not set
+				LDI A, 0b00000001 ; Otherwise, Reset TOV0
+				OUT TIFR, A ; Note - write 1 to reset
+				DEC B ; Decrement count
+				BRNE WAIT_10msec ; Loop if count not equal to 0
+			 	RET
+		\end{verbatim}
+  \end{enumerate}
+\end{document}

@@ -33,6 +33,13 @@
 					$L(DFA) = \{ w | \delta^*(s,w) \in F\}$\\
 					$L(CFL) = \{ w | A_s \rightarrow^* w\}$\\
 					An accepted string w must end in a terminal which means $w \in F$ as per the production rules of the given CFG.
+				\item \includegraphics[width=\textwidth]{p1_b.png}\\
+					\begin{itemize}\textbf{Derivation of CFG:}\\
+						\item Starting nonterminal $A_s$
+						\item $A_s \rightarrow 0A_s | 1A_1 | \epsilon$
+						\item $A_1 \rightarrow 1A_s | 0A_2$
+						\item $A_2 \rightarrow 1A_2 | 0A_1$
+					\end{itemize}
 			\end{enumerate}
 		
 		\item 
@@ -119,10 +126,9 @@
 					\item$k=n, n \neq m$
 					\item$k \neq m \neq n$
 				\end{itemize}
-			\end{enumerate}
-		\item $S_0 \rightarrow SS_2$\\
-			$S \rightarrow aSa | bSb | cS_2$\\
-			$S_2 \rightarrow aS | bS | \epsilon$\\
-			$S_0 \rightarrow SS_2$\\
+			\item $S_0 \rightarrow SS_2$\\
+				$S \rightarrow aSa | bSb | cS_2$\\
+				$S_2 \rightarrow aS_2 | bS_2 | \epsilon$\\
+		\end{enumerate}
 	\end{enumerate}
 \end{document}

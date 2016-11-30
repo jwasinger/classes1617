@@ -1,0 +1,94 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{flexisym}
+
+\graphicspath{ {images/} }
+
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+
+\begin{document}
+
+  \title{CS 321: Assignment 7}
+  \author{Jared Wasinger}
+
+  \maketitle
+
+	\begin{enumerate}
+		\item\begin{enumerate}
+			\item Not Complete
+			\item\begin{itemize}
+				\item I choose S = $a^pb^{p+1}c^{p+2}$
+				\item Adversary splits S into S = $uvwxy$ such that $|vwx| \leq p$, $|vx| > 0$.  \textbf{Cases:} \begin{itemize}
+					\item $vwx = a^j$ such that $j \leq p$
+					\item $vwx = a^jb^k$ such that $j+k \leq p$
+					\item $vwx = b^k$ such that $k \leq p$
+					\item $vwx = b^kc^l$ such that $k+l \leq p$
+					\item $vwx = c^l$ such that $l \leq p$
+					\end{itemize}
+				\item Choose i based on case:\begin{itemize}
+					\item Case 1,2,3: choose any $i \neq 0$.  This will cause characers (either 'a' or 'b') to be pumped into the string breaking the rules of the language because the result of the pumping will be a string where either: $|a| \geq |b|$ (one or more a's pumped in) or $|b| \geq |c|$.
+					\item Case 3,4:  choose $i = 0$ which will remove at least one 'b' or 'c' from the string, making the resulting string no longer in the language.
+					\end{itemize}
+				\end{itemize}
+			\end{enumerate}
+		\item\begin{enumerate}
+			\item \textbf{First give a plain-language description of how the TM head moves and modify the tape contents}
+				\begin{enumerate}
+					\item Begin by reading all a's, b's and c's.  At each read the machine will only continue transitioning if the string it is reading is correctly formed: a's before b's before c's.
+					\item When the character after the last c is read (presumably an empty space), a special character '*' is placed (replacing the space).
+					\item The machine then reads to the left until the location of the first 'c'.
+					\item The machine repeats a routine whereby the current 'c' character is replaced by a space, the machine then reads left until either an 'a' or 'b' is reached, replacing this character with an empty space.  After this the machine reads to the right until it encounters a 'c'.  The process is repeated until one of the following conditions are met:\begin{itemize}
+						\item The special end of string character '*' is reached.
+						\item The beginning of the tape is reached.
+						\end{itemize}
+					\item The last stage of the computation is a sweep of the string (between '*' and beginning of tape).  If all characters read in this stage are empty space, then an accept state is entered.  Otherwise, the machine enters a fail state.
+				\end{enumerate}
+			\item \textbf{Give a complete transition table (like the one shown in class Nov 21). You can assume the TM has a way of detecting the left end of the tape}\\
+			$A = Q_0$, $I \in F$\\
+      \begin{tabular}{ l | l | l | l | l }
+        Current State & Scanned Symbol & Print Symbol & Move Tape & Final State \\ \hline
+				A & a & a & Right & A\\
+				A & b & b & Right & B\\
+				A & c & c & RIGHT & C\\
+				B & a & N/A & N/A & HALT\\
+				B & b & b & Right & B\\
+				B & c & c & Right & C\\
+				C & c & c & Right & C\\
+				C &empty& * & Left & D\\
+				D & c & c & Left & D\\
+				D & a &empty& Right & E\\
+				D & b &empty& Right & E\\
+
+				E & c &empty& Left & F\\
+				E &empty&empty& Right & E\\
+				E & * & * & Left & H\\
+
+				F &empty&empty& Left & F\\
+				F & a &empty& Right & E\\
+				F & b &empty& Right & E\\
+				F & BOS & N/A & Right & G\\
+				
+				G &empty&empty&Right&G\\
+				G & a & N/a&N/a&Halt\\
+				G & b & N/a&N/a&Halt\\
+				G & * & N/a&N/a&I\\
+
+				H &empty&empty&Left& H \\
+				H & a & N/a&N/a&Halt\\
+				H & b & N/a&N/a&Halt\\
+				H & BOS & N/a&N/a&I\\
+      \end{tabular}
+			\item \textbf{ Give your states human-readable names, so that the correspondence between your plain-language description and transition table is clear}\begin{itemize}
+				\item A- Read a's moving right	
+				\item B- Read b's moving right
+				\item C- Read c's
+				\item D- Read from end of string to beginning of c's
+				\item E- Move right to remove c
+				\item F- Move left to remove a/b
+				\item G- Move right to end of string (*).
+				\item H- Move left to beginning of string (BOS)
+				\end{itemize}
+			\end{enumerate}
+	\end{enumerate}
+\end{document}

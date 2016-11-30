@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{flexisym}
+\usepackage{graphicx}
+
+\begin{document}
+
+  \title{ECE 375: Assignment 1}
+  \author{Jared Wasinger}
+
+  \maketitle
+
+  \begin{enumerate}
+		\item ADIW
+			Fetch Cycle:\\
+					$MAR \leftarrow PC$\\
+					$MDR \leftarrow M(MAR), PC \leftarrow PC + 1$\\
+					$IR \leftarrow MDR, MAR \leftarrow PC$\\
+					$MDR \leftarrow M(MAR)$\\
+					$PC \leftarrow PC + 1$\\
+			Execute Cycle:\\
+					$AC \leftarrow ZL$\\
+					$AC \leftarrow AC + MDR$\\
+					$ZL \leftarrow AC$\\
+					$AC \leftarrow ZH$\\
+					if C=1: $AC \leftarrow AC + 1$\\
+					$ZH \leftarrow AC$\\
+		\item
+			Fetch:\\
+				$MAR \leftarrow PC$\\
+				$MDR \leftarrow M(MAR), PC \leftarrow PC + 1$\\
+				$IR(15...8) \leftarrow MDR$\\
+				$MAR \leftarrow PC$\\
+				$MDR \leftarrow M(MAR), PC \leftarrow PC + 1$\\
+			  $IR(7...0) \leftarrow MDR$\\
+			Execute:\\
+				$MAR \leftarrow SP$\\
+				$M(MAR) \leftarrow MDR, SP \leftarrow SP + 1$\\
+  \end{enumerate}
+\end{document}
