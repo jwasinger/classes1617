@@ -1,0 +1,138 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{flexisym}
+\usepackage{graphicx}
+\usepackage{enumitem}
+
+\begin{document}
+
+  \title{CS 380: Assignment 1}
+  \author{Jared Wasinger}
+
+  \maketitle
+
+  \begin{enumerate}
+    \item\begin{enumerate}
+      \item\begin{enumerate}
+        \item Maximum number of opcodes:\\
+        Instruction Size: 1 word = 32 bits\\
+        \textbf{Answer:} $2^{32}=4294967296$
+
+        \item Address field size:\\
+          $2^{17} = 131072 > 128000$\\
+          \textbf{Answer:} 17 bits\\
+        \item Register field size:\\
+          $2^5=32$
+          \textbf{Answer:} 5 bits\\
+        \item Opcode field size:\\
+          32 - (opcode + register + address)\\
+          $= 32 - (2 + 5 + 17)$\\ 
+          $= 32 - 24$\\
+          = 8 bits
+        \end{enumerate}
+
+        \item\begin{enumerate}
+          \item PC = 17 bits  (address size)
+          \item MAR = 17 bits (address size)
+          \item MDR = 32 bits (word size)
+          \item IR = 8 bits   (opcode size)
+          \item AC = 32 bits  (word size)
+          \end{enumerate}
+      \end{enumerate}
+      \item\begin{enumerate}
+        \item AND Y;  $Y \leftarrow AC \wedge M(Y)$\\
+            \textbf{Fetch Cycle:}\begin{itemize}
+              \item $MAR \leftarrow PC$
+              \item $MDR \leftarrow M(MAR), PC \leftarrow PC + 1$
+              \item $IR \leftarrow MDR_{opcode}, MAR \leftarrow MDR_{address}$
+            \end{itemize}
+            \textbf{Execute Cycle:}\begin{itemize}
+              \item $MAR \leftarrow Y$
+              \item $MDR \leftarrow M(MAR)$
+              \item $AC \leftarrow AC \wedge MDR; MAR \leftarrow Y$
+              \item $MDR \leftarrow AC$
+              \item $M(MAR) \leftarrow MDR$
+              \end{itemize}
+        \item ISZ Y;  $M(Y) \leftarrow M(Y) + 1$, If(M(Y)+1=0) Then $PC \leftarrow PC + 1$\\
+            \textbf{Fetch Cycle:}\begin{itemize}
+              \item $MAR \leftarrow PC$
+              \item $MDR \leftarrow M(MAR), PC \leftarrow PC + 1$
+              \item $IR \leftarrow MDR_{opcode}, MAR \leftarrow MDR_{address}$
+              \end{itemize}
+            \textbf{Execute Cycle:}\\
+        \item DCA Y;  $M(Y) \leftarrow AC; AC \leftarrow 0$\\
+            \textbf{Fetch Cycle:}\begin{itemize}
+              \item $MAR \leftarrow PC$
+              \item $MDR \leftarrow M(MAR), PC \leftarrow PC + 1$
+              \item $IR \leftarrow MDR_{opcode}, MAR \leftarrow MDR_{address}$
+              \end{itemize}
+            \textbf{Execute Cycle:}\begin{itemize}
+              \item $MAR \leftarrow Y$
+              \item $MDR \leftarrow M(MAR)$
+              \item $MAR \leftarrow MDR$, $MDR \leftarrow AC$
+              \item $M(MAR) \leftarrow MDR$, $AC \leftarrow 0$
+              \end{itemize}
+        \item JMS Y;  $M(Y) \leftarrow PC, PC \leftarrow Y + 1$\\
+            \textbf{Fetch Cycle:}\begin{itemize}
+              \item $MAR \leftarrow PC$
+              \item $MDR \leftarrow M(MAR), PC \leftarrow PC + 1$
+              \item $IR \leftarrow MDR_{opcode}, MAR \leftarrow MDR_{address}$
+              \end{itemize}
+            \textbf{Execute Cycle:}\begin{itemize}
+              \item $MAR \leftarrow Y$, $MDR \leftarrow PC$
+              \item $MDR \leftarrow M(MAR)$, $AC \leftarrow PC$
+              \item $AC \leftarrow AC + 1$
+              \item $PC \leftarrow AC$
+              \end{itemize}
+        \end{enumerate}
+      \item \textbf{Execute Cycle}\begin{itemize}
+        \item asdf
+        \end{itemize}
+      \item\begin{enumerate}[label=(\roman*)]
+        \item MOV R1, R28\\
+          $R1 \leftarrow LOW(Y)$
+          $R1 \leftarrow 0x02$
+        \item LD  R4, Y+\\
+          $R4 \leftarrow M(Y)$, $Y \leftarrow Y + 1$\\
+          $R4 \leftarrow 0x35$, $Y \leftarrow 0x0103$
+        \item LDI R4, 33\\
+          $R4 \leftarrow hex(33)$\\
+          $R4 \leftarrow 0x21$\\
+        \item ROL R3\\
+          $R3 = 0x07 = 0b00000111$\\
+          $R3 \leftarrow 0b0001 1111$\\
+          $R3 \leftarrow 0x1F$\\
+
+          SREG has carry bit set to 0:\\
+          $SREG \leftarrow 0b1111 1110$\\
+          $SREG \leftarrow 0xFE$\\
+
+        \end{enumerate}
+      \item\begin{verbatim}
+        .ORG 0x000F
+        LDI XH, high(CTR)
+        LDI XL, low(CTR)
+        LDI R31, 0xf0       ;R31 is the counter register
+        CLR R5              ;Clear preset value of the result register
+      LOOP:   
+        CLC       ;Clear SREG carry bit (otherwise this loop wouldnt end)
+        ROL R31             
+        BRCC SKIP ;If carry is cleared, there are no more 1's to be read
+        INC R5    ;If carry is not cleared, add 1 to the result register
+      SKIP:   
+        CPI R31, 0x00   ;Check whether there are any 1s left to read
+        BRNE LOOP       ;Repeat the original loop if there are
+        ST X, R5        ;Store the resultant number of 1s in M(X)
+      DONE:   
+        JMP DONE
+        .DSEG
+      CTR: .BYTE 1  
+        \end{verbatim}
+
+        \textbf{Explanation}:\\
+        This program counts the number of 1's in the number 0xF0.  The program will loop through 'LOOP' four times, and then reach 'SKIP'.  The statement 'CPI R31, 0x00' will evaluate to true causing the program to store the number of 1's in memory location pointed to by X and terminate.\\
+        Memory location 'CTR' will hold 0x4 (the number of 1's in 0xF0).\\
+
+  \end{enumerate}
+\end{document}
