@@ -7,7 +7,7 @@
 
 \begin{document}
 
-  \title{CS 380: Assignment 1}
+  \title{ECE 375: Assignment 1}
   \author{Jared Wasinger}
 
   \maketitle
@@ -16,8 +16,8 @@
     \item\begin{enumerate}
       \item\begin{enumerate}
         \item Maximum number of opcodes:\\
-        Instruction Size: 1 word = 32 bits\\
-        \textbf{Answer:} $2^{32}=4294967296$
+        Opcode size = 8 bits\\
+        \textbf{Ansswer:} $2^8 = 256$\\
 
         \item Address field size:\\
           $2^{17} = 131072 > 128000$\\
@@ -87,7 +87,12 @@
               \end{itemize}
         \end{enumerate}
       \item \textbf{Execute Cycle}\begin{itemize}
-        \item asdf
+        \item $MDR \leftarrow M(MAR), TEMP \leftarrow AC$
+        \item $AC \leftarrow MDR$
+        \item $AC \leftarrow AC - 1$
+        \item $MDR \leftarrow AC$
+        \item $M(MAR) \leftarrow MDR, MAR \leftarrow AC$
+        \item $AC \leftarrow TEMP, MDR \leftarrow TEMP$
         \end{itemize}
       \item\begin{enumerate}[label=(\roman*)]
         \item MOV R1, R28\\
@@ -99,6 +104,7 @@
         \item LDI R4, 33\\
           $R4 \leftarrow hex(33)$\\
           $R4 \leftarrow 0x21$\\
+        \item MUL R2, R3
         \item ROL R3\\
           $R3 = 0x07 = 0b00000111$\\
           $R3 \leftarrow 0b0001 1111$\\
