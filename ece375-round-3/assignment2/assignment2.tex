@@ -1,0 +1,73 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{flexisym}
+\usepackage{graphicx}
+\usepackage{enumitem}
+
+\begin{document}
+
+  \title{ECE 375: Assignment 2}
+  \author{Jared Wasinger}
+
+  \maketitle
+
+  \begin{enumerate}
+    \item \textbf{Fetch Cycle} \begin{enumerate}
+      \item $MAR \leftarrow PC, PC \leftarrow PC + 1$
+      \item $MDR \leftarrow M(MAR)$
+      \item $TEMP_{15:8} \leftarrow MDR, MAR \leftarrow PC$
+      \item $MDR \leftarrow M(MAR), PC \leftarrow PC + 1$
+      \item $TEMP_{7:0} \leftarrow MDR, MAR \leftarrow PC$
+      \item $IR \leftarrow TEMP, MDR \leftarrow M(MAR), PC \leftarrow PC + 1$
+      \item $TEMP_{15:8} \leftarrow MDR, MAR \leftarrow PC$
+      \item $MDR \leftarrow M(MAR)$
+      \item $TEMP_{7:0} \leftarrow MDR$
+      \end{enumerate}
+    \textbf{Execute Cycle} \begin{enumerate}
+      \item $MAR \leftarrow SP, MDR \leftarrow TEMP_{7:0}$
+      \item $M(MAR) \leftarrow MDR, SP \leftarrow SP + 1$
+      \item $MAR \leftarrow SP, MDR \leftarrow TEMP_{15:8}$
+      \item $MDR \leftarrow M(MAR)$
+      \item $PC \leftarrow TEMP$
+      \end{enumerate}
+      \textbf{Can PC increment/decrement itself?}
+      \textbf{Does AC need to be preserved?}
+    \item adiw ZH:ZL, 32\\
+      \textbf{Fetch Cycle}\begin{enumerate}
+        \item $MAR \leftarrow PC$
+        \item $MDR \leftarrow M(MAR), PC \leftarrow PC + 1$ 
+        \item $IR \leftarrow MDR$
+        \item $MAR \leftarrow PC$
+        \item $MDR \leftarrow M(MAR)$
+        \end{enumerate}
+      \textbf{execute Cycle}\begin{enumerate}
+        \item $AC \leftarrow MDR, MAR \leftarrow ZL$ ; AC gets immediate value
+        \item $AC \leftarrow AC + r30$ ; add ZL to the immediate value
+        \item $r30 \leftarrow AC$
+        \item if Carry set:\begin{enumerate}
+          \item $AC \leftarrow r31$
+          \item $AC \leftarrow AC + 1$
+          \item $r31 \leftarrow AC$
+          \end{enumerate}
+        \end{enumerate}
+    \item\begin{enumerate}
+      \item\begin{verbatim}
+2. INIT: clr zero ; Set zero register to zero
+3. MAIN: ldi  low(X), low(addrA) ; Load X low byte
+4. ldi high(X), high(addrA); Load X high byte
+5. ldi low(Z), low(LAddrP) ; Load Z low byte
+6. ldi high(Z), high(LAddrP); Load Z high byte
+7. ldi oloop, 2 ; Load counter
+8. MUL16_OLOOP: ldi low(Y), low(addrB); Load low byte
+9. ldi high(Y), high(addrB); Load high byte
+        \end{verbatim}
+      \end{enumerate}
+  \end{enumerate}
+  \textbf{Questions}\begin{enumerate}
+    \item Can PC increment/decrement itself?
+    \item Does AC need to be preserved (if not stated)?
+    \item Is there a command to store predefined constants in data memory?
+    \end{enumerate}
+
+\end{document}
