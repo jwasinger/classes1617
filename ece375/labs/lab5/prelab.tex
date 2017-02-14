@@ -1,0 +1,83 @@
+% template created by: Russell Haering. arr. Joseph Crop
+\documentclass[12pt,letterpaper]{article}
+\usepackage{anysize}
+\marginsize{2cm}{2cm}{1cm}{1cm}
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{4cm}
+    \begin{flushright}
+    {\huge
+        ECE 375 Lab 5 - Prelab\\[1cm]
+    }
+    {\large
+        Large Number Arithmetic
+    }
+    \end{flushright}
+    \begin{flushleft}
+    Lab Time: Wednesday 5-7
+    \end{flushleft}
+    \begin{flushright}
+    Jared Wasinger
+    \vfill
+    \rule{5in}{.5mm}\\
+    TA Signature
+    \end{flushright}
+
+\end{titlepage}
+
+\section{Prelab}
+\begin{enumerate}
+  \item \textbf{For this lab, you will be asked to perform arithmetic operations on numbers that are larger than 8 bits. To be successful at this, you will need to understand and utilize many of the various arithmetic operations supported by the AVR 8-bit instruction set. List and describe all of the addition, subtraction, and multiplication instructions (i.e. ADC, SUBI, FMUL, etc.) available in AVR’s 8-bit instruction set.}\\
+  \begin{itemize}
+    \item ADD Rd, Rr : $Rd \leftarrow Rd + Rr$ - add two registers
+    \item ADC Rd, Rr : $Rd \leftarrow Rd + Rr + c$ - add two registers with carry
+    \item SUB Rd, Rr : $Rd \leftarrow Rd - Rr $ - subtract two registers
+    \item SUBC Rd, Rr: $Rd \leftarrow Rd - Rr - c$ - subtract two registers with carry
+    \item SUBI Rd, K : $Rd \leftarrow Rd - K$ - subtract immediate value from register
+    \item ADIW Rd+1:Rd, K : $Rd+1:Rd \leftarrow Rd+1:Rd + K$ - Add immediate to word
+    \item SBIW Rd+1:Rd, K : $Rd+1:Rd \leftarrow Rd+1:rd - K$ - Subtract immediate from word
+    \item MUL Rd, Rr      : $R1:R0 \leftarrow Rd x Rr$ - Multiply unsigned
+    \item MULS Rd, Rr     : $R1:R0 \leftarrow Rd x Rr$ - Multiply signed
+    \item MULSU Rd, Rr    : $R1:R0 \leftarrow rd x Rr$ - Multiply signed with unsigned
+    \end{itemize}
+
+  \item \textbf{Write pseudocode for an 8-bit AVR function that will take two 16-bit numbers (from data memory addresses \$0111:\$0110 and \$0121:\$0120), add them together, and then store the 16-bit result (in data memory addresses \$0101:\$0100). (Note: The syntax "\$0111:\$0110" is meant to specify that the function will expect little-endian data, where the highest byte of a multi-byte value is stored in the highest address of its range of addresses.)}\\
+    \begin{verbatim}
+LD          tmp, $0110
+LD          tmp2, $0120
+ADD         tmp, tmp2
+ST          low(result), tmp
+ldi         tmp, $00
+BRBC        carry_flag, add_higher
+inc         tmp
+add_higher:
+LD         tmp2, $0111
+ADD         tmp, tmp2
+LD         tmp2, $0121
+ADD         tmp, tmp2
+ST          high(result), tmp
+    \end{verbatim}
+
+
+  \item \textbf{Write pseudocode for an 8-bit AVR function that will take the 16-bit number in \$0111:\$0110, subtract it from the 16-bit number in \$0121:\$0120, and then store the 16-bit result into \$0101:\$0100.}
+    \begin{verbatim}
+.def sourceAddrA=$1110
+.def sourceAddrB=$0120
+
+...
+LD  tmp,  low(sourceAddrB)
+LD  tmp2, low(sourceAddrA)
+SUB tmp2, tmp
+ST low(targetAddr), tmp2
+LD tmp, high(sourceAddrB)
+LD tmp2, high(sourceAddrA)
+SUBC tmp2, tmp
+ST high(targetAddr), tmp2
+    \end{verbatim}
+
+
+
+  \end{enumerate}
+\end{document}
