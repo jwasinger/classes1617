@@ -1,4 +1,4 @@
-\documentclass[letterpaper,10pt]{IEEETran}
+\documentclass[onecolumn,10pt]{IEEETran}
 
 \usepackage{graphicx}                                        
 \usepackage{amssymb}                                         
@@ -6,8 +6,7 @@
 \usepackage{amsthm}                                          
 
 \usepackage{alltt}                                           
-\usepackage{float}
-\usepackage{color}
+\usepackage{float} \usepackage{color}
 \usepackage{url}
 \usepackage{listings}
 
@@ -20,6 +19,8 @@
 
 \newcommand{\cred}[1]{{\color{red}#1}}
 \newcommand{\cblue}[1]{{\color{blue}#1}}
+
+\include{IEEETrans.cls}
 
 %\newcommand{\toc}{\tableofcontents}
 
@@ -40,7 +41,7 @@
 }
 \maketitle
 
-\section Comparing FreeBSD with Linux
+\section{Comparing FreeBSD with Linux}
 
 	Processes in FreeBSD are similar to Linux in many ways.  The relationship between processes and threads in Linux and FreeBSD systems are hierarchical.  When a system is booted, a special `init` process is started to complete system initialization.  All subsequent processes exist as children of the `init` process.  The system call `clone` is used to create a new process (same?).
 
@@ -82,5 +83,7 @@ struct thread_info {
 	FreeBSD thread scheduling is similar to Linux in its goal.  FreeBSD thread scheduling is implemented in the form of a round-robin allocated thread system through assignment of processor time slices to threads.  Like Linux, FreeBSD scheduling gives priority to interactive jobs by increasing the scheduling priority of threads that are blocked on I/O operations for 1 or more second (125-126).  
 	I assume that this feature was implemented on both operating systems in order to make them more viable for use on desktop machines which typically run more interactive programs than traditional mainframe computers.
 
-\section Comparing Windows with Linux
+\section{Comparing Windows with Linux}
+Unlike Linux-based operating systems which make no distinction between threads and processes, Windows defines a clear distinction between threads and processes.  Each process in windows is represented by an instance of an executive process (EPROCESS) structure.  Among other things, this structure also contains references to the threads allocated for any given process.  For each process that is executing a Win32 executable, there is a separate structure maintained in parallel by the Win32 subsystem process (CRSS).
+	Windows introduces the concept of a 'protected process'.  An administrator has full control over the code running in any process on the system.  However, this elevated privilege could potentially be used to perform illegal activities (such as extracting movie/song information from movie/video player processes).  Protected processes exist alongside normal process.  However, they add significant constraints to access rights from other processes executing on the system.  Protected processes can only be created if the executable image file has been signed with a special Windows Media Certificate. (368)  This was probably implemented this way so that Windows would be more attractive as a commercial platform for software.  This way, companies building video/sound editing and playback programs would feel more comfortable deploying their software to Windows.  It is also likely that Microsoft gets to make some extra profit by charging to issue the special Windows Media Certificates.
 \end{document}
