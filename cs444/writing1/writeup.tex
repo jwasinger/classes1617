@@ -43,9 +43,9 @@
 
 \section{Comparing FreeBSD with Linux}
 
-	Processes in FreeBSD are similar to Linux in many ways.  The relationship between processes and threads in Linux and FreeBSD systems are hierarchical.  When a system is booted, a special `init` process is started to complete system initialization.  All subsequent processes exist as children of the `init` process.  The system call `clone` is used to create a new process (same?).
+	Processes in FreeBSD are similar to Linux in many ways.  The relationship between processes and threads in Linux and FreeBSD systems are hierarchical.  When a system is booted, a special `init` process is started to complete system initialization.  All subsequent processes exist as children of the `init` process.  The system call `clone` is used to create a new process \cite{lkd}.
 
-	In Linux processes are implemented in the kernel via a doubly-linked list known as the `task list`.  Each entry in the `task list` contains information about the state of a given process on the system.
+	In Linux processes are implemented in the kernel via a doubly-linked list known as the `task list`.  Each entry in the `task list` contains information about the state of a given process on the system \cite{lkd}.
 
 \begin{lstlisting}
 struct thread_info {
@@ -65,11 +65,11 @@ struct thread_info {
 	Both Linux and FreeBSD threads maintain a kernel stack.  This is so that Kernel operations on user-space process can be done without exposing sensitive Kernel information to the user-space.
 
 	The implementation of processes and threads in FreeBSD differs from Linux in several important ways.  
-	FreeBSD makes a clear distinction between threads and processes.  Threads must be spawned by a process.  In their lightest form, threads can share nearly all resources with their parent process (including PID).
+	FreeBSD makes a clear distinction between threads and processes.  Threads must be spawned by a process.  In their lightest form, threads can share nearly all resources with their parent process (including PID) \cite{freebsd}.
 
 	Both Linux and FreeBSD conform to the POSIX Threads standard.  This was probably chosen because  having multiple operating systems support a common interface for concurrency is mutually benefical to both FreeBSD and Linux.  This is because it is easier to write programs that can be cross-compiled between FreeBSD and Linux operating systems.
 
-	In FreeBSD CPU resources are given to threads based on `scheduling class` and `scheduling priority`(97).  FreeBSD has two kernel scheduling classes and three user scheduling classes (97):
+	In FreeBSD CPU resources are given to threads based on `scheduling class` and `scheduling priority`.  FreeBSD has two kernel scheduling classes and three user scheduling classes \cite{freebsd} :
 		\begin{itemize}
 			\item (0-47) bottom-half kernel (interrupt)
 			\item (48-79) real-time user
@@ -84,6 +84,11 @@ struct thread_info {
 	I assume that this feature was implemented on both operating systems in order to make them more viable for use on desktop machines which typically run more interactive programs than traditional mainframe computers.
 
 \section{Comparing Windows with Linux}
-Unlike Linux-based operating systems which make no distinction between threads and processes, Windows defines a clear distinction between threads and processes.  Each process in windows is represented by an instance of an executive process (EPROCESS) structure.  Among other things, this structure also contains references to the threads allocated for any given process.  For each process that is executing a Win32 executable, there is a separate structure maintained in parallel by the Win32 subsystem process (CRSS).
-	Windows introduces the concept of a 'protected process'.  An administrator has full control over the code running in any process on the system.  However, this elevated privilege could potentially be used to perform illegal activities (such as extracting movie/song information from movie/video player processes).  Protected processes exist alongside normal process.  However, they add significant constraints to access rights from other processes executing on the system.  Protected processes can only be created if the executable image file has been signed with a special Windows Media Certificate. (368)  This was probably implemented this way so that Windows would be more attractive as a commercial platform for software.  This way, companies building video/sound editing and playback programs would feel more comfortable deploying their software to Windows.  It is also likely that Microsoft gets to make some extra profit by charging to issue the special Windows Media Certificates.
+Unlike Linux-based operating systems which make no distinction between threads and processes, Windows defines a clear distinction between threads and processes.  Each process in windows is represented by an instance of an executive process (EPROCESS) structure.  Among other things, this structure also contains references to the threads allocated for any given process.  For each process that is executing a Win32 executable, there is a separate structure maintained in parallel by the Win32 subsystem process (CRSS) \cite{windows}.
+	Windows introduces the concept of a 'protected process'.  An administrator has full control over the code running in any process on the system.  However, this elevated privilege could potentially be used to perform illegal activities (such as extracting movie/song information from movie/video player processes).  Protected processes exist alongside normal process.  However, they add significant constraints to access rights from other processes executing on the system.  Protected processes can only be created if the executable image file has been signed with a special Windows Media Certificate \cite{windows}.  This was probably implemented this way so that Windows would be more attractive as a commercial platform for software.  This way, companies building video/sound editing and playback programs would feel more comfortable deploying their software to Windows.  It is also likely that Microsoft gets to make some extra profit by charging to issue the special Windows Media Certificates.
+
+\bibliographystyle{plain}
+\bibliography{bibfile}
+\newpage
+
 \end{document}
