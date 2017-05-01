@@ -7,10 +7,6 @@
 
 .equ COUNT_MAX = 7
 
-
-.dseg
-AddrNums:   .db $01, $BE, $35, $EC, $48, $2D, $04, $02
-
 .cseg
 .ORG $0000
   rjmp    INIT

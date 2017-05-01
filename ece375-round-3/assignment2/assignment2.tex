@@ -31,8 +31,6 @@
       \item $MDR \leftarrow M(MAR)$
       \item $PC \leftarrow TEMP$
       \end{enumerate}
-      \textbf{Can PC increment/decrement itself?}
-      \textbf{Does AC need to be preserved?}
     \item adiw ZH:ZL, 32\\
       \textbf{Fetch Cycle}\begin{enumerate}
         \item $MAR \leftarrow PC$
@@ -62,12 +60,84 @@
 8. MUL16_OLOOP: ldi low(Y), low(addrB); Load low byte
 9. ldi high(Y), high(addrB); Load high byte
         \end{verbatim}
+      \item addrA - \$0203, addrB - \$010C
+      \item 
       \end{enumerate}
-  \end{enumerate}
-  \textbf{Questions}\begin{enumerate}
-    \item Can PC increment/decrement itself?
-    \item Does AC need to be preserved (if not stated)?
-    \item Is there a command to store predefined constants in data memory?
-    \end{enumerate}
+    \item\begin{verbatim}
+      0000            1100  kkkk  kkkk  kkkk
+      ...
+      0002            1101  kkkk  kkkk  kkkk
+      0003            1001  0101  0001  1000
+      ...
+      000B            1110  KKKK  dddd  KKKK
+      000C            1110  KKKK  dddd  KKKK
+      000D            1110  KKKK  dddd  KKKK
+      000E            1110  KKKK  dddd  KKKK
+      000F            1100  kkkk  kkkk  kkkk
+      ...
+      100F            1011  0AAd  dddd  AAAA
+      1010            1001  001r  rrrr  1001
+      1011            1001  010d  dddd  0011
+      1012            1001  001r  rrrr  1101
+      1013            1001  0101  0000  1000
+      \end{verbatim}
+      \begin{itemize}
+        \item 0000 - jump forward to \$0046, current address is \$0000, $\$0000 - \$0047 = -\$0047 = 0000 0100 0111$
+        \item 0002 -
+        \item 000B - KKKK KKKK is the value high(CTR) = high(\$0100) = (\$01) = 0000 0001, dddd is the target register (XH) = 27 = 0b11011 (first 1 implied) = 1011
+        \item 000C - KKKK KKKK = low(CTR) = low(\$0100) = \$00 = 0000 0000, dddd is the target register (XL) = 0b11010 (first 1 implied) = 1010
+        \item 000D - KKKK KKKK is the value high(DATA) = high(\$0101) = \$01 = 0000 0001, dddd is the target register = YH = r29 = 1101
+        \item 000E - KKKK KKKK is the value low(DATA) = low(\$0101) = \$01 = 0000 0001, dddd is the target register YL = r28 = 1100
+        \item 000F -
+        \item 100F - d dddd is the target register = r16 = 10000, AA AAAA is the source address in I/O Space = PINA = \$19 = 11001 = 01 1001
+        \item 1010 - r rrrr is the source register = r16 = 10000
+        \item 1011 - d dddd is the destination register = r17 = 10001
+        \item 1012 - r rrrr is the source register = r17 = 10001
+      \end{itemize}
+  \item\textbf{Source Code:}
+    \begin{verbatim}
+.include "m128def.inc"				; Include definition file
 
+.def minimum=r16
+.def count=r17
+.def location=r18
+.def mpr=r19
+
+.equ COUNT_MAX = 7
+
+.cseg
+.ORG $0000
+  rjmp    INIT
+
+.ORG $0046
+INIT:
+  ;initialize stack
+  ldi	mpr, low(RAMEND)
+  out	SPL, mpr
+  ldi	mpr, high(RAMEND)
+  out	SPH, mpr
+
+  rcall Min
+
+Min:	ldi		XL, low(AddrNums)
+		ldi		XH, high(AddrNums)
+		ld		location, X
+		ldi		count, COUNT_MAX
+		mov		minimum, location
+
+Loop:	dec		count
+		inc		XL
+		ld		location, X
+		cp		minimum, location 
+		brlo	EndLoop
+		mov		minimum, location ; set a new maximum if we have found a higher number
+EndLoop:
+		cpi		count, 0
+		brne	Loop
+		ldi		XL, 0x08
+		ldi		XH, 0x00
+		st		X, minimum
+		ret
+    \end{verbatim}
+  \end{enumerate}
 \end{document}
