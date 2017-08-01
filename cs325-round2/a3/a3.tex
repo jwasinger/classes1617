@@ -1,0 +1,85 @@
+\documentclass{article}
+
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{listings}
+
+\begin{document}
+
+\title{CS 325: Assignment 2}
+\author{Jared Wasinger}
+
+\maketitle
+
+\begin{enumerate}
+  
+  \item asdf
+  \item\textbf{Explanation:}\\
+  This problem can be solved using a modified version of the topological sort algorithm.  The algorithm is modified to return the length of the longest path that can be taken through the graph from a given index.  After topological sort is completed, the length of the longest path through the graph will be returned.  If this length is equal to $|V|-1$, the graph has a Hamiltonian cycle.
+
+  \textbf{Runtime:}\\
+  Because this algorithm makes no modifications of depth-first topological sort, its runtime is $\Theta(|E| + |V|)$.\\\\
+  
+  \begin{verbatim}
+
+nodes = [[2,4,7],[1,4,9],...] #adjacency lists
+
+#assume that all nodes have the properties discovered = processed = False by default
+
+def main():
+  max = 0
+  while nodes.hasUnvisitedGraphs():
+    result = visit(getNextNode(nodes))
+    if result > max:
+      max = result
+
+  if max != len(nodes) - 1:
+    return False # longest length is a path between all vertices (Hamiltonian cycle)
+
+  return True
+    
+
+def visit(node):
+  if node.done:
+    return
+  
+  if n.visited:
+    throw exception("not a DAG")
+
+  n.visited = True
+
+  max = 0
+
+  for edge in node.edges:
+    longestSoFar = visit(edge)
+    if longestSoFar > max:
+      max = longestSoFar
+
+    edge.done = True
+
+  return 1 + max
+    \end{verbatim}
+  \item asdf
+  \item \textbf{Description:}\\
+  A simple BFS algorithm can help determine whether the graph can be 'colored'.  When evaluating a vertex and its edges the edges must all have a different color than the vertex.  If the search completes and this property holds for all nodes in the graph, then 
+  \textbf{Pseudocode:}\\
+  \begin{verbatim}
+adjList = [[(1,2), (3,5), (x,y), (p,q),  ..., ...], [..., ..., ...], ...]
+verts = ['red', 'blue', 'blue', ....]
+
+def isTwoColor(start):
+
+def _isTwoColor(v, color):
+  for adj in range(0, adjList[v]):
+    if verts[adj] == color:
+      return False
+  \end{verbatim}
+  \item\begin{itemize}
+    \item Primm's algorithm would be a good choice
+    \item I choose to implement a brute-force solution.  For each vertex in the graph, run a depth-first search that returns a list of distances to all nodes in the graph from the chosen vertex.  When this is completed, choose the vertex which has the least distance to the furthest node in the graph.\\
+      \textbf{Time Complexity:}\\
+      DFS is $\Theta(|v|+|e|)$.  Because this algorithm is run for every vertex, the complexity becomes $\Theta(|v|*(|v|+|e|))$.  However, the last step of the algorithm involves enumerating over all sets of the node distances (size $|v|$) to find the minimum.  The final time complexity becomes $\Theta(|v|*(|v|+|e|)+|v|)$.
+    \end{itemize}
+
+  \end{enumerate}
+\end{document}
